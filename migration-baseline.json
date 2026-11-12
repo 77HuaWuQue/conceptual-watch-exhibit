@@ -1,0 +1,21 @@
+{
+  "source_url": "https://conceptual-watch-exhibit.zdf13402548264.chatgpt.site/",
+  "source_commit": "84ab49e9339256e5e296603e57aa666df800af53",
+  "files": {
+    "app.js": "214cff515fcc5fb784e8552bc960aff05a81f59d4f272b28347456c94eb70aa8",
+    "engine.js": "e331fb6c977a1416f6fdac5096f652a1e353211b5ae87b640ddfb936d5867762",
+    "experience.js": "88b164d5231749f921d0bd7c378367f9ace63c97b88cf9002f73560a15fb9a78",
+    "index.html": "af6fda16cacb5dd769b3f9723490664a3be68ce2ec08c6f82c8dfd3a43fb4434",
+    "LICENSE": "b0e0e711c04aac69e316e9c79a3119b722dc7d65e129990cdbe7a35dea6fec8b",
+    "materials.js": "f8d279db10ca49c3385fcafe6b4abd38a455a0ce9b58d0907a6949544b9dac73",
+    "mechanism.js": "1625d190343547bfc81b00ecc4043691a9c4c62d4b9e8c0607fde2a147630207",
+    "README.md": "4036a07bfef85097947ce24b8f633740a0f197a6300736cef63c9b919939c7e6",
+    "stage.js": "b26bc42f4266bb655b8b6912e34addd86f54b2a280e8d5120e2585649c470334",
+    "style.css": "4e28f010785d1407ed67a00ac008b20327fb15528283bfd6bf1856e9c52f34ea",
+    "vendor/addons/controls/OrbitControls.js": "b779fd83b825462e39a59096b8d080dd53c068f9584c2780b3340a7154b2f117",
+    "vendor/addons/utils/BufferGeometryUtils.js": "063ac4ec555cde333215e1160904e24f1b85f3b46f59a1b8c9b97280b7266adc",
+    "vendor/three.core.js": "c2d6c099ca62621022578fe5ef1e1f701d1385d85ba51307b6adc302dc0311cf",
+    "vendor/three.module.js": "00c9fc97c739972921fb9ba36c6ee9b7511c1d1a6746a626d1a5657226fd6555",
+    "webmcp.js": "a87ac5f6062adf4e7f8889e41af957289788def43f089b39a11f71bb7fe0c4c7"
+  }
+}

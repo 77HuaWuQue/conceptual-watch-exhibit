@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d10"><meta name="description" content="基于 Conceptual-X-16 源码改造的机械腕表交互展厅。旋转、透视、拆解与部件选择。">
+<title>时械 · Mechanical Watch</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23090d10'/%3E%3Cpath d='m8 7 16 18M24 7 8 25' stroke='%23cdb18a' stroke-width='5'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23090d10'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+<main id="exhibit">
+  <div id="viewport" role="img" aria-label="交互式机械腕表，可旋转、拆解并选择部件"></div>
+  <div class="vignette"></div>
+  <header class="masthead">
+    <div class="identity"><span class="monogram">时械<span class="small-x"> / </span></span><div><span class="eyebrow">THE MECHANICAL WATCH</span><span class="subline">A study in the passage of time</span></div></div>
+    <button id="guided" class="quiet-button"><span class="orbit-icon">◈</span><span>探索机械之心</span><span class="arrow">↗</span></button>
+  </header>
+  <div class="specification"><span><b>2.5</b> Hz</span><i></i><span><b>18,000</b> 振次 / 小时</span><i></i><span><b>01</b> 发条动力</span></div>
+  <div class="view-menu">
+    <button id="camera-trigger" aria-expanded="false" aria-controls="camera-menu"><span class="view-number" id="camera-number">01</span><span id="camera-name">立体全景</span><span class="chevron">⌄</span></button>
+    <div id="camera-menu" class="popover" hidden></div>
+  </div>
+  <div id="bank-labels" aria-hidden="true"></div>
+  <div id="hover-label" hidden></div>
+  <aside id="info" class="info-panel" hidden aria-live="polite"><div class="panel-top"><span class="eyebrow" id="info-kicker">部件研究</span><button id="close-info" class="icon-button" aria-label="关闭部件说明">×</button></div><h1 id="info-title"></h1><p id="info-description"></p><div id="part-readout"></div><button id="study-part" class="text-button">单独查看此部件 <span>↗</span></button></aside>
+  <section id="tour" class="tour-panel" hidden aria-live="polite"><div class="panel-top"><span id="tour-step" class="eyebrow"></span><button id="close-tour" class="icon-button" aria-label="关闭导览">×</button></div><h2 id="tour-title"></h2><p id="tour-description"></p><div class="tour-progress" id="tour-progress"></div><div class="tour-navigation"><button id="tour-back" class="text-button">← 上一步</button><button id="tour-next" class="text-button">下一步 →</button></div></section>
+  <div id="section-key" hidden><span class="key-line"></span><span>半剖视图 · 表壳与表盘</span></div>
+  <div id="phase-study" class="phase-study" hidden><div class="eyebrow">OSCILLATOR STUDY</div><div class="phase-banks" id="phase-banks"></div><div class="phase-caption"><span id="phase-angle">000°</span><span>2.5 Hz · 示意振荡</span></div></div>
+  <div class="bottom-area">
+    <div class="view-caption"><span id="view-caption">发条储存能量，摆轮划分时间。</span><span class="interaction-hint">拖动旋转 <span>·</span> 滚轮缩放</span></div>
+    <div class="control-dock">
+      <button id="play" class="play-button" aria-label="暂停腕表"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 5v10M14 5v10"/></svg></button>
+      <div class="speed-control"><div><label for="rpm">演示速度</label><output id="rpm-value" for="rpm">1 <span>×</span></output></div><input id="rpm" type="range" min="0.1" max="60" step="0.1" value="1" aria-label="演示时间倍率"><span class="speed-labels"><span>慢动作</span><span>加速</span></span></div>
+      <span class="dock-divider"></span>
+      <div class="mode-switch" aria-label="表壳显示模式"><button data-mode="solid" class="active" aria-pressed="true">完整</button><button data-mode="ghost" aria-pressed="false">透视</button><button data-mode="section" aria-pressed="false">半剖</button></div>
+      <span class="dock-divider secondary-divider"></span>
+      <button id="explode" class="dock-button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 3 4 2 4-2M8 21l4-2 4 2M3 8l2 4-2 4m18-8-2 4 2 4M8 9l4-2 4 2v6l-4 2-4-2Z"/></svg><span>拆解</span></button>
+      <div class="focus-wrap"><button id="focus-trigger" class="dock-button" aria-expanded="false" aria-controls="focus-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><circle cx="12" cy="12" r="4"/></svg><span>聚焦</span></button><div id="focus-menu" class="popover" hidden><span class="eyebrow">选择机芯组件</span><button data-focus="all">完整腕表 <span>↗</span></button><button data-focus="barrel">发条盒 <span>储存能量</span></button><button data-focus="train">传动轮系 <span>传递动力</span></button><button data-focus="balance">摆轮游丝 <span>2.5 Hz</span></button><button data-focus="escape">擒纵机构 <span>释放节拍</span></button></div></div>
+      <button id="reset" class="reset-button" aria-label="复位并重新装配" title="复位视角"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg></button>
+    </div>
+    <footer><button id="about" class="footer-button">机械腕表 · 教学示意模型 <span>ⓘ</span></button><span id="running-status">RUNNING <i></i> REAL-TIME MECHANISM</span></footer>
+  </div>
+  <div id="loading"><span class="load-symbol">时械</span><span>正在装配腕表</span></div>
+  <div id="error" hidden><h2>此展厅需要 WebGL 2</h2><p>请开启浏览器硬件加速，或使用支持 WebGL 2 的浏览器。</p><button onclick="location.reload()">重试</button></div>
+</main>
+<script type="module">import('./app.js').catch(error=>{if(document.querySelector('#error').hidden){document.querySelector('#error h2').textContent='The exhibit could not load';document.querySelector('#error p').textContent='A required component did not finish loading. Please reload the exhibit.';document.querySelector('#error').hidden=false;}document.querySelector('#loading').hidden=true;console.error(error);});</script>
+</body></html>
